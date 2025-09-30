@@ -1,35 +1,21 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es">
 
-<html lang="es"><html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear enlace a reto</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
 
-<head><head>
+<body>
+    <h1>Crear enlace a reto</h1>
+    <form action="/crear" method="post">
+        <label>Título:<br><input type="text" name="titulo" required></label><br>
+        <label>Descripción:<br><input type="text" name="descripcion" required></label><br>
+        <label>Enlace:<br><input type="url" name="enlace" required placeholder="https://..."></label><br>
+        <button type="submit">Crear enlace</button>
+    </form>
+    <a href="/">Volver</a>
+</body>
 
-    <meta charset="UTF-8">    <meta charset="UTF-8">
-
-    <title>Crear reto</title>    <title>Crear reto</title>
-
-    <link rel="stylesheet" href="/css/styles.css">    <link rel="stylesheet" href="/css/styles.css">
-
-</head></head>
-
-<body><body>
-
-    <h1>Crear nuevo reto</h1>    <h1>Crear nuevo reto</h1>
-
-    <form action="/crear" method="post">    <form action="/crear" method="post">
-
-        <label>Título: <input type="text" name="titulo" required></label><br>        <label>Título: <input type="text" name="titulo" required></label><br>
-
-        <label>Descripción: <input type="text" name="descripcion" required></label><br>        <label>Descripción: <input type="text" name="descripcion" required></label><br>
-
-        <label>Flag: <input type="text" name="flag" required></label><br>        <label>Flag: <input type="text" name="flag" required></label><br>
-
-        <button type="submit">Crear</button>        <button type="submit">Crear</button>
-
-    </form>    </form>
-
-    <a href="/">Volver</a>    <a href="/">Volver</a>
-
-</body></body>
-
-</html></html>
+</html>

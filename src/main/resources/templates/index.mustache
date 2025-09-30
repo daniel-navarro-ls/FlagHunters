@@ -1,45 +1,40 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es">
 
-<html lang="es"><html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Retos y Flags</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
 
-<head><head>
+<body>
+    <h1>Retos disponibles</h1>
+    <a href="/crear">Crear nuevo enlace a reto</a>
+    <table style="width:100%;margin-top:1em;">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Enlace</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#retos}}
+            <tr>
+                <td><b>{{titulo}}</b></td>
+                <td>{{descripcion}}</td>
+                <td><a href="{{enlace}}" target="_blank">Ir al reto</a></td>
+                <td><a href="/resolver/{{id}}">Resolver</a></td>
+            </tr>
+            {{/retos}}
+            {{^retos}}
+            <tr>
+                <td colspan="4">No hay retos aún. ¡Crea el primero!</td>
+            </tr>
+            {{/retos}}
+        </tbody>
+    </table>
+</body>
 
-    <meta charset="UTF-8">    <meta charset="UTF-8">
-
-    <title>Retos y Flags</title>    <title>Retos y Flags</title>
-
-    <link rel="stylesheet" href="/css/styles.css">    <link rel="stylesheet" href="/css/styles.css">
-
-</head></head>
-
-<body><body>
-
-    <h1>Retos disponibles</h1>    <h1>Retos disponibles</h1>
-
-    <a href="/crear">Crear nuevo reto</a>    <a href="/crear">Crear nuevo reto</a>
-
-    <ul>    <ul>
-
-        {{#retos}}        {{#retos}}
-
-        <li>        <li>
-
-            <b>{{titulo}}</b>: {{descripcion}}            <b>{{titulo}}</b>: {{descripcion}}
-
-            [<a href="/resolver/{{id}}">Resolver</a>]            [<a href="/resolver/{{id}}">Resolver</a>]
-
-        </li>        </li>
-
-        {{/retos}}        {{/retos}}
-
-        {{^retos}}        {{^retos}}
-
-        <li>No hay retos aún.</li>        <li>No hay retos aún.</li>
-
-        {{/retos}}        {{/retos}}
-
-    </ul>    </ul>
-
-</body></body>
-
-</html></html>
+</html>
