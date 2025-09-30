@@ -1,0 +1,26 @@
+package com.example.retosflags.model;
+
+public class Reto {
+    private Long id;
+    private String titulo;
+    private String descripcion;
+    private String flag;
+
+    public Reto() {}
+
+    public Reto(Long id, String titulo, String descripcion, String flag) {
+        this.id = id;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.flag = flag;
+    }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public String getFlag() { return flag; }
+    public void setFlag(String flag) { this.flag = flag; }
+}

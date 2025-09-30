@@ -1,0 +1,45 @@
+<!DOCTYPE html><!DOCTYPE html>
+
+<html lang="es"><html lang="es">
+
+<head><head>
+
+    <meta charset="UTF-8">    <meta charset="UTF-8">
+
+    <title>Retos y Flags</title>    <title>Retos y Flags</title>
+
+    <link rel="stylesheet" href="/css/styles.css">    <link rel="stylesheet" href="/css/styles.css">
+
+</head></head>
+
+<body><body>
+
+    <h1>Retos disponibles</h1>    <h1>Retos disponibles</h1>
+
+    <a href="/crear">Crear nuevo reto</a>    <a href="/crear">Crear nuevo reto</a>
+
+    <ul>    <ul>
+
+        {{#retos}}        {{#retos}}
+
+        <li>        <li>
+
+            <b>{{titulo}}</b>: {{descripcion}}            <b>{{titulo}}</b>: {{descripcion}}
+
+            [<a href="/resolver/{{id}}">Resolver</a>]            [<a href="/resolver/{{id}}">Resolver</a>]
+
+        </li>        </li>
+
+        {{/retos}}        {{/retos}}
+
+        {{^retos}}        {{^retos}}
+
+        <li>No hay retos aún.</li>        <li>No hay retos aún.</li>
+
+        {{/retos}}        {{/retos}}
+
+    </ul>    </ul>
+
+</body></body>
+
+</html></html>
