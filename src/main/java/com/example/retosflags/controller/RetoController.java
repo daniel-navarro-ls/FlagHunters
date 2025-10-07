@@ -5,6 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class RetoController {
@@ -12,6 +15,11 @@ public class RetoController {
     private Long nextId = 1L;
 
     @GetMapping("/")
+    public String login(Model model) {
+        return "login";
+    }
+    
+    @GetMapping("/home")
     public String home(Model model) {
         model.addAttribute("retos", retos);
         return "index";
