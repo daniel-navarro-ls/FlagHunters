@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.retosflags.model.User;
 import com.example.retosflags.service.UserService;
@@ -36,5 +37,11 @@ public class LoginController {
         userService.addUser(user);
         session.setAttribute("user", user);
         return "redirect:/home";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("user");
+        return "redirect:/";
     }
 }
