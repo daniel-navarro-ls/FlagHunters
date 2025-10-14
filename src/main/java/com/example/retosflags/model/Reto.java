@@ -6,15 +6,17 @@ public class Reto {
     private String descripcion;
     private String enlace;
     private String flag;
+    private String autor;
 
     public Reto() {}
 
-    public Reto(Long id, String titulo, String descripcion, String enlace, String flag) {
+    public Reto(Long id, String titulo, String descripcion, String enlace, String flag, String autor) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.enlace = enlace;
         this.flag = flag;
+        this.autor = autor;
     }
 
     public Long getId() { return id; }
@@ -27,4 +29,6 @@ public class Reto {
     public void setEnlace(String enlace) { this.enlace = enlace; }
     public String getFlag() { return flag; }
     public void setFlag(String flag) { this.flag = flag; }
+    public String getAutor() { return autor; }
+    public void setAutor(String autor) { this.autor = autor; }
 }

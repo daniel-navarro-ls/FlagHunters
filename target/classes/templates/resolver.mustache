@@ -4,20 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Resolver reto</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/buttons.css">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body>
+    <header class="header">
+        <div class="container">
+            <nav class="actions">
+                <a class="btn" href="/home">Inicio</a>
+                <a class="btn" href="/crear">Subir reto</a>
+                <a class="btn secondary" href="/perfil">Perfil{{#user}} ({{username}}){{/user}}</a>
+            </nav>
+        </div>
+    </header>
+    <main class="main">
+    <div class="container card">
     <h1>Resolver reto: {{reto.titulo}}</h1>
+    <p><small>por {{reto.autor}}</small></p>
+    <p><a class="btn secondary" href="/home">Volver al inicio</a></p>
     <p>{{reto.descripcion}}</p>
-    <form action="/resolver/{{reto.id}}" method="post">
-        <label>Flag:<br><input type="text" name="flag" required></label>
-        <button type="submit">Comprobar</button>
+    <form action="/resolver/{{reto.id}}" method="post" class="stack-md">
+        <div class="form-group">
+            <label for="flag">Flag</label>
+            <input type="text" id="flag" name="flag" required>
+        </div>
+        <button class="btn" type="submit">Comprobar</button>
     </form>
     {{#resultado}}
-    <p style="font-weight:bold;color:{{#correcto}}green{{/correcto}}{{^correcto}}red{{/correcto}};">{{resultado}}</p>
+    <p class="{{#correcto}}success{{/correcto}}{{^correcto}}error{{/correcto}}" style="font-weight:bold;">{{resultado}}</p>
     {{/resultado}}
-    <a href="/">Volver</a>
+    </div>
+    </main>
 </body>
 
 </html>

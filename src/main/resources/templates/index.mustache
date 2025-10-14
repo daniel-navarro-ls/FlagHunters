@@ -4,13 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Retos y Flags</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/tables.css">
+    <link rel="stylesheet" href="/css/buttons.css">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body>
+    <header class="header">
+        <div class="container">
+            <strong>FlagHunters</strong>
+            <nav class="actions">
+                <a class="btn" href="/home">Inicio</a>
+                <a class="btn" href="/crear">Subir reto</a>
+                <a class="btn secondary" href="/perfil">Perfil{{#user}} ({{username}}){{/user}}</a>
+            </nav>
+        </div>
+    </header>
+    <main class="main">
+    <div class="container">
     <h1>Retos disponibles</h1>
-    <a href="/crear">Crear nuevo enlace a reto</a>
-    <table style="width:100%;margin-top:1em;">
+    <table>
         <thead>
             <tr>
                 <th>Título</th>
@@ -22,7 +37,7 @@
         <tbody>
             {{#retos}}
             <tr>
-                <td><b>{{titulo}}</b></td>
+                <td><b>{{titulo}}</b><br><small>por {{autor}}</small></td>
                 <td>{{descripcion}}</td>
                 <td><a href="{{enlace}}" target="_blank">Ir al reto</a></td>
                 <td><a href="/resolver/{{id}}">Resolver</a></td>
@@ -35,6 +50,8 @@
             {{/retos}}
         </tbody>
     </table>
+    </div>
+    </main>
 </body>
 
 </html>

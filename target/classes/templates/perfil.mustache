@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/tables.css">
+    <link rel="stylesheet" href="/css/buttons.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="actions">
+                <a class="btn" href="/home">Inicio</a>
+                <a class="btn" href="/crear">Subir reto</a>
+                <a class="btn secondary" href="/perfil">Perfil{{#user}} ({{username}}){{/user}}</a>
+            </nav>
+        </div>
+    </header>
+    <main class="main">
+    <div class="container">
+        <h1>Perfil de {{#user}}{{username}}{{/user}}</h1>
+        <section class="card" style="margin-bottom:1rem;">
+            <h2>Retos publicados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Descripción</th>
+                        <th>Enlace</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#retosPublicados}}
+                    <tr>
+                        <td>{{titulo}}</td>
+                        <td>{{descripcion}}</td>
+                        <td><a href="{{enlace}}" target="_blank">Ir al reto</a></td>
+                    </tr>
+                    {{/retosPublicados}}
+                    {{^retosPublicados}}
+                    <tr>
+                        <td colspan="3">Aún no has publicado retos.</td>
+                    </tr>
+                    {{/retosPublicados}}
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card">
+            <h2>Retos resueltos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Descripción</th>
+                        <th>Enlace</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#retosResueltos}}
+                    <tr>
+                        <td>{{titulo}}</td>
+                        <td>{{descripcion}}</td>
+                        <td><a href="{{enlace}}" target="_blank">Ir al reto</a></td>
+                    </tr>
+                    {{/retosResueltos}}
+                    {{^retosResueltos}}
+                    <tr>
+                        <td colspan="3">Todavía no has resuelto retos.</td>
+                    </tr>
+                    {{/retosResueltos}}
+                </tbody>
+            </table>
+        </section>
+    </div>
+    </main>
+</body>
+
+</html>
+
