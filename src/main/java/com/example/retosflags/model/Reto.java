@@ -1,11 +1,22 @@
 package com.example.retosflags.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "retos")
 public class Reto {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String titulo;
+    @Column(nullable = false, length = 1000)
     private String descripcion;
+    @Column(nullable = false)
     private String enlace;
+    @Column(nullable = false)
     private String flag;
+    @Column(nullable = false)
     private String autor;
 
     public Reto() {}

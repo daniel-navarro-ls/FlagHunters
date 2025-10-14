@@ -1,6 +1,7 @@
 package com.example.retosflags.controller;
 
 import com.example.retosflags.model.Reto;
+import com.example.retosflags.repository.RetoRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,11 @@ public class RetoController {
     private final List<Reto> retos = new ArrayList<>();
     private Long nextId = 1L;
     private final Map<String, Set<Long>> retosResueltosPorUsuario = new HashMap<>();
+    private final RetoRepository retoRepository;
+
+    public RetoController(RetoRepository retoRepository) {
+        this.retoRepository = retoRepository;
+    }
 
     @GetMapping("/")
     public String login(Model model, HttpSession session) {
@@ -26,7 +32,7 @@ public class RetoController {
     
     @GetMapping("/home")
     public String home(Model model, HttpSession session) {
-        model.addAttribute("retos", retos);
+        model.addAttribute("retos", retoRepository.findAll());
         model.addAttribute("user", session.getAttribute("user"));
         return "index";
     }
@@ -46,14 +52,14 @@ public class RetoController {
                             Model model, HttpSession session) {
         Object u = session.getAttribute("user");
         String autor = (u instanceof com.example.retosflags.model.User) ? ((com.example.retosflags.model.User) u).getUsername() : "anon";
-        Reto reto = new Reto(nextId++, titulo, descripcion, enlace, flag, autor);
-        retos.add(reto);
+        Reto reto = new Reto(null, titulo, descripcion, enlace, flag, autor);
+        retoRepository.save(reto);
         return "redirect:/home";
     }
 
     @GetMapping("/resolver/{id}")
     public String resolverForm(@PathVariable Long id, Model model, HttpSession session) {
-        Reto reto = retos.stream().filter(r -> r.getId().equals(id)).findFirst().orElse(null);
+        Reto reto = retoRepository.findById(id).orElse(null);
         model.addAttribute("reto", reto);
         model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("resultado", null);
@@ -62,7 +68,7 @@ public class RetoController {
 
     @PostMapping("/resolver/{id}")
     public String resolverReto(@PathVariable Long id, @RequestParam String flag, Model model, HttpSession session) {
-        Reto reto = retos.stream().filter(r -> r.getId().equals(id)).findFirst().orElse(null);
+        Reto reto = retoRepository.findById(id).orElse(null);
         boolean correcto = reto != null && reto.getFlag().equals(flag);
         model.addAttribute("reto", reto);
         model.addAttribute("user", session.getAttribute("user"));
@@ -83,14 +89,13 @@ public class RetoController {
         Object u = session.getAttribute("user");
         if (u == null) return "redirect:/";
         String username = ((com.example.retosflags.model.User) u).getUsername();
-        List<Reto> propios = new ArrayList<>();
+        List<Reto> propios = retoRepository.findByAutor(username);
         List<Reto> resueltos = new ArrayList<>();
-        for (Reto r : retos) {
-            if (username.equals(r.getAutor())) propios.add(r);
-        }
         Set<Long> solvedIds = retosResueltosPorUsuario.getOrDefault(username, Collections.emptySet());
-        for (Reto r : retos) {
-            if (solvedIds.contains(r.getId())) resueltos.add(r);
+        if (!solvedIds.isEmpty()) {
+            for (Long rid : solvedIds) {
+                retoRepository.findById(rid).ifPresent(resueltos::add);
+            }
         }
         model.addAttribute("user", u);
         model.addAttribute("retosPublicados", propios);
