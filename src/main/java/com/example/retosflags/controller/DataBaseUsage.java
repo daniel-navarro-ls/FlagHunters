@@ -36,12 +36,12 @@ public class DataBaseUsage implements CommandLineRunner {
         // Seed retos if empty
         if (retoRepository.count() == 0) {
             List<Reto> retos = List.of(
-                new Reto(null, "Forense básico", "Descifra un archivo oculto", "https://ejemplo.ctf/forense1", "FLAG{FORENSE1}", "admin"),
-                new Reto(null, "Cripto I", "ROMPE un cifrado César", "https://ejemplo.ctf/crypto1", "FLAG{CESAR}", "alice"),
-                new Reto(null, "Web SQLi", "Inyección en login vulnerable", "https://ejemplo.ctf/web1", "FLAG{SQLI}", "bob"),
-                new Reto(null, "Pwn warmup", "Desbordamiento simple", "https://ejemplo.ctf/pwn1", "FLAG{PWN1}", "admin"),
-                new Reto(null, "OSINT tweet", "Encuentra coordenadas en redes", "https://ejemplo.ctf/osint1", "FLAG{OSINT}", "alice"),
-                new Reto(null, "Stego PNG", "Mensaje en imagen", "https://ejemplo.ctf/stego1", "FLAG{STEGO}", "bob")
+                new Reto(null, "Forense básico", "Descifra un archivo oculto", "https://ejemplo.ctf/forense1", "FLAG{FORENSE1}", 1L),
+                new Reto(null, "Cripto I", "ROMPE un cifrado César", "https://ejemplo.ctf/crypto1", "FLAG{CESAR}", 2L),
+                new Reto(null, "Web SQLi", "Inyección en login vulnerable", "https://ejemplo.ctf/web1", "FLAG{SQLI}", 3L),
+                new Reto(null, "Pwn warmup", "Desbordamiento simple", "https://ejemplo.ctf/pwn1", "FLAG{PWN1}", 1L),
+                new Reto(null, "OSINT tweet", "Encuentra coordenadas en redes", "https://ejemplo.ctf/osint1", "FLAG{OSINT}", 2L),
+                new Reto(null, "Stego PNG", "Mensaje en imagen", "https://ejemplo.ctf/stego1", "FLAG{STEGO}", 3L)
             );
             retoRepository.saveAll(retos);
         }

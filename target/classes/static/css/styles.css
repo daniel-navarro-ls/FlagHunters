@@ -5,7 +5,7 @@
   --color-primary: #00ff88;     /* verde neón */
   --color-primary-dark: #00cc6a;
   --color-text: #e5e5e5;        /* texto claro */
-  --color-muted: #222;
+  --color-muted: #e5e5e5;
   --color-border: #222;
   --radius: 10px;
   --transition: 0.2s ease-in-out;

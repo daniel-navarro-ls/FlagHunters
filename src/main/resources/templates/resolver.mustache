@@ -5,12 +5,6 @@
     <meta charset="UTF-8">
     <title>Resolver reto</title>
     <link rel="stylesheet" href="/css/styles.css">
-
-    <link rel="stylesheet" href="/css/base.css">
-    <link rel="stylesheet" href="/css/layout.css">
-    <link rel="stylesheet" href="/css/forms.css">
-    <link rel="stylesheet" href="/css/buttons.css">
-    <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body>
@@ -26,7 +20,7 @@
     <main class="main">
     <div class="container card">
     <h1>Resolver reto: {{reto.titulo}}</h1>
-    <p><small>por {{reto.autor}}</small></p>
+    <p><small>por {{username}}</small></p>
     <p><a class="btn secondary" href="/home">Volver al inicio</a></p>
     <p>{{reto.descripcion}}</p>
     <form action="/resolver/{{reto.id}}" method="post" class="stack-md">
@@ -39,6 +33,32 @@
     {{#resultado}}
     <p class="{{#correcto}}success{{/correcto}}{{^correcto}}error{{/correcto}}" style="font-weight:bold;">{{resultado}}</p>
     {{/resultado}}
+    
+    <!-- Comment form -->
+    {{#user}}
+    <hr style="margin: 2rem 0;">
+    <h3>Dejar comentario</h3>
+    <form action="/comment/{{reto.id}}" method="post" class="stack-md">
+        <div class="form-group">
+            <label for="content">Comentario</label>
+            <textarea id="content" name="content" rows="3" required placeholder="Escribe tu comentario aquí..."></textarea>
+        </div>
+        <button class="btn" type="submit">Comentar</button>
+    </form>
+    {{/user}}
+    
+    <!-- Comments section -->
+    <hr style="margin: 2rem 0;">
+    <h3>Comentarios</h3>
+    {{#comments}}
+    <div class="card" style="margin-bottom: 1rem;">
+        <p><strong>{{user.username}}</strong></p>
+        <p>{{comment}}</p>
+    </div>
+    {{/comments}}
+    {{^comments}}
+    <p>No hay comentarios aún. ¡Sé el primero en comentar!</p>
+    {{/comments}}
     </div>
     </main>
 </body>

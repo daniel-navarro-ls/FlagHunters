@@ -28,6 +28,7 @@ public class LoginController {
             return "error";
         }
         session.setAttribute("user", loggedUser);
+        session.setAttribute("username", loggedUser.getUsername());
         return "redirect:/home";
     }
     
@@ -36,6 +37,7 @@ public class LoginController {
         User user=new User(username,password);
         userService.addUser(user);
         session.setAttribute("user", user);
+        session.setAttribute("username", user.getUsername());
         return "redirect:/home";
     }
 

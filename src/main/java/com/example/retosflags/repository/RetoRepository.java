@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.retosflags.model.Reto;
 
 public interface RetoRepository extends JpaRepository<Reto, Long> {
-    List<Reto> findByAutor(String autor);
+    
+
+    List<Reto> findByUserId(Long id);
 }
 
 

@@ -76,6 +76,22 @@
                 </tbody>
             </table>
         </section>
+
+        <section class="card">
+            <table>
+            <h2>Mis comentarios</h2>
+            {{#userComments}}
+            <tbody>
+                <tr>
+                <td>{{comment}}</td>
+                </tr>
+            </tbody>
+            {{/userComments}}
+            {{^userComments}}
+            <p>Aún no has hecho comentarios.</p>
+            {{/userComments}}
+            </table>
+        </section>
     </div>
     </main>
 </body>
