@@ -19,20 +19,21 @@ public class Reto {
     private String enlace;
     @Column(nullable = false)
     private String flag;
-    @Column(name = "user_id")
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
     @OneToMany(mappedBy = "reto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comentario> comentarios=new ArrayList<>();
 
     public Reto() {}
 
-    public Reto(Long id, String titulo, String descripcion, String enlace, String flag, Long userId) {
+    public Reto(Long id, String titulo, String descripcion, String enlace, String flag, User user) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.enlace = enlace;
         this.flag = flag;
-        this.userId = userId;
+        this.user = user;
     }
 
     public Long getId() { return id; }
@@ -45,6 +46,8 @@ public class Reto {
     public void setEnlace(String enlace) { this.enlace = enlace; }
     public String getFlag() { return flag; }
     public void setFlag(String flag) { this.flag = flag; }
-    public Long getUser() { return userId; }
-    public void setAutor(Long id) { this.userId = id; }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+    public List<Comentario> getComentarios() { return comentarios; }
+    public void setComentarios(List<Comentario> comentarios) { this.comentarios = comentarios; }
 }

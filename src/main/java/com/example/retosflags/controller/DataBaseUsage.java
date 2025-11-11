@@ -11,6 +11,7 @@ import com.example.retosflags.repository.UserRepository;
 import com.example.retosflags.repository.RetoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class DataBaseUsage implements CommandLineRunner {
@@ -35,13 +36,16 @@ public class DataBaseUsage implements CommandLineRunner {
 
         // Seed retos if empty
         if (retoRepository.count() == 0) {
+            Optional<User> adminUser = userRepository.findByUsername("admin");
+            Optional<User> aliceUser = userRepository.findByUsername("alice");
+            Optional<User> bobUser = userRepository.findByUsername("bob");
             List<Reto> retos = List.of(
-                new Reto(null, "Forense básico", "Descifra un archivo oculto", "https://ejemplo.ctf/forense1", "FLAG{FORENSE1}", 1L),
-                new Reto(null, "Cripto I", "ROMPE un cifrado César", "https://ejemplo.ctf/crypto1", "FLAG{CESAR}", 2L),
-                new Reto(null, "Web SQLi", "Inyección en login vulnerable", "https://ejemplo.ctf/web1", "FLAG{SQLI}", 3L),
-                new Reto(null, "Pwn warmup", "Desbordamiento simple", "https://ejemplo.ctf/pwn1", "FLAG{PWN1}", 1L),
-                new Reto(null, "OSINT tweet", "Encuentra coordenadas en redes", "https://ejemplo.ctf/osint1", "FLAG{OSINT}", 2L),
-                new Reto(null, "Stego PNG", "Mensaje en imagen", "https://ejemplo.ctf/stego1", "FLAG{STEGO}", 3L)
+                new Reto(null, "Forense básico", "Descifra un archivo oculto", "https://ejemplo.ctf/forense1", "FLAG{FORENSE1}", adminUser.get()),
+                new Reto(null, "Cripto I", "ROMPE un cifrado César", "https://ejemplo.ctf/crypto1", "FLAG{CESAR}", aliceUser.get()),
+                new Reto(null, "Web SQLi", "Inyección en login vulnerable", "https://ejemplo.ctf/web1", "FLAG{SQLI}", bobUser.get()),
+                new Reto(null, "Pwn warmup", "Desbordamiento simple", "https://ejemplo.ctf/pwn1", "FLAG{PWN1}", adminUser.get()),
+                new Reto(null, "OSINT tweet", "Encuentra coordenadas en redes", "https://ejemplo.ctf/osint1", "FLAG{OSINT}", aliceUser.get()),
+                new Reto(null, "Stego PNG", "Mensaje en imagen", "https://ejemplo.ctf/stego1", "FLAG{STEGO}", bobUser.get())
             );
             retoRepository.saveAll(retos);
         }

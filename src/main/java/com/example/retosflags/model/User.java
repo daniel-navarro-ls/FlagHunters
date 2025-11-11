@@ -47,4 +47,6 @@ public class User {
     
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+    public List<Comentario> getComentarios(){ return comentarios;}
+    public void setComentarios(List<Comentario> comentarios){ this.comentarios=comentarios;}
 }

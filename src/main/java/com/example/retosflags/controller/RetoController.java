@@ -2,6 +2,9 @@ package com.example.retosflags.controller;
 
 import com.example.retosflags.model.Reto;
 import com.example.retosflags.model.User;
+import com.example.retosflags.dto.ComentarioDTO;
+import com.example.retosflags.dto.RetoDTO;
+import com.example.retosflags.dto.UserDTO;
 import com.example.retosflags.model.Comentario;
 import com.example.retosflags.repository.RetoRepository;
 import com.example.retosflags.service.ComentarioService;
@@ -60,16 +63,16 @@ public class RetoController {
                             Model model, HttpSession session) {
         Object u = session.getAttribute("user");
         String autor = (u instanceof User) ? ((User) u).getUsername() : "anon";
-        Reto reto = new Reto(null, titulo, descripcion, enlace, flag, ((User)u).getId());
+        RetoDTO reto = retoService.createRetoDTO(null,titulo,descripcion,enlace,flag,(User)u);
         retoService.addReto(reto);;
         return "redirect:/home";
     }
 
     @GetMapping("/resolver/{id}")
     public String resolverForm(@PathVariable Long id, Model model, HttpSession session) {
-        Reto reto = retoService.getRetoById(id);
+        RetoDTO reto = retoService.getRetoById(id);
         Object user=session.getAttribute("user");
-        List<Comentario> comments = comentarioService.findByRetoId(id);
+        List<ComentarioDTO> comments = comentarioService.findByRetoId(id);
         model.addAttribute("reto", reto);
         model.addAttribute("comments", comments);
         model.addAttribute("user", session.getAttribute("user"));
@@ -81,9 +84,9 @@ public class RetoController {
     @PostMapping("/resolver/{id}")
     public String resolverReto(@PathVariable Long id, @RequestParam String flag, Model model, HttpSession session) {
         Object user=session.getAttribute("user");
-        Reto reto = retoService.getRetoById(id);
-        boolean correcto = reto != null && reto.getFlag().equals(flag);
-        List<Comentario> comments = comentarioService.findByRetoId(id);
+        RetoDTO reto = retoService.getRetoById(id);
+        boolean correcto = reto != null && retoService.getFlag(reto).equals(flag);
+        List<ComentarioDTO> comments = comentarioService.findByRetoId(id);
         model.addAttribute("reto", reto);
         model.addAttribute("comments", comments);
         model.addAttribute("user", session.getAttribute("user"));
@@ -105,18 +108,18 @@ public class RetoController {
         Object u = session.getAttribute("user");
         if (u == null) return "redirect:/";
         String username = ((User) u).getUsername();
-        List<Reto> propios = retoService.findByAuthorId(((User) u).getId());
-        List<Reto> resueltos = new ArrayList<>();
+        List<RetoDTO> propios = retoService.findByAuthorId(((User) u).getId());
+        List<RetoDTO> resueltos = new ArrayList<>();
         Set<Long> solvedIds = retosResueltosPorUsuario.getOrDefault(username, Collections.emptySet());
         if (!solvedIds.isEmpty()) {
             for (Long rid : solvedIds) {
-                Reto reto=retoService.getRetoById(rid);
+                RetoDTO reto=retoService.getRetoById(rid);
                 if(reto!=null){
                     resueltos.add(reto);
                 }
             }
         }
-        List<Comentario> userComments = comentarioService.findByUserId(((User) u).getId());
+        List<ComentarioDTO> userComments = comentarioService.findByUserId(((User) u).getId());
         model.addAttribute("user", u);
         model.addAttribute("retosPublicados", propios);
         model.addAttribute("retosResueltos", resueltos);
@@ -128,9 +131,7 @@ public class RetoController {
     public String addComment(@PathVariable Long retoId, @RequestParam String content, HttpSession session) {
         Object user = session.getAttribute("user");
         if (user == null) return "redirect:/";
-        Reto reto=retoService.getRetoById(retoId);
-        Comentario comment = new Comentario(content, (User)user, reto);
-        comentarioService.addComment(comment);
+        comentarioService.addComment(retoId,((User)user).getId(),content);
         return "redirect:/resolver/" + retoId;
     }
 }
