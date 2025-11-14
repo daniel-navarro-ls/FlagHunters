@@ -21,6 +21,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comentario> comentarios=new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reto> retosResueltos=new ArrayList<>();
     public User() {
     }
 
@@ -49,4 +52,14 @@ public class User {
     public void setId(Long id) { this.id = id; }
     public List<Comentario> getComentarios(){ return comentarios;}
     public void setComentarios(List<Comentario> comentarios){ this.comentarios=comentarios;}
+
+    public List<Reto> getRetosResueltos() {
+        return retosResueltos;
+    }
+
+    public void addRetoResuelto(Reto resuelto) {
+        if (!retosResueltos.contains(resuelto)){
+            retosResueltos.add(resuelto);
+        }
+    }
 }
