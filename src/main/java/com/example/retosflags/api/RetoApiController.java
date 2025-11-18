@@ -57,10 +57,11 @@ public class RetoApiController {
                                              @RequestParam String flag,
                                              @RequestParam Long userId) {
         
-        RetoDTO reto=retoService.createRetoDTO(userId, titulo, descripcion, enlace, flag, userService.getUser(userId));
-        retoService.addReto(reto);
+        RetoDTO reto=retoService.createRetoDTO(null, titulo, descripcion, enlace, flag, userService.getUser(userId));
+        RetoDTO devolver=retoService.addAPIReto(reto);
+        userService.actualizarRetosUsuario(userId,reto);
         if(reto!=null){
-            return new ResponseEntity<>(reto,HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(devolver,HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

@@ -3,6 +3,8 @@ package com.example.retosflags.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.retosflags.dto.RetoDTO;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -22,8 +24,16 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comentario> comentarios=new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany
+    @JoinTable(
+        name = "user_retos_resueltos",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "reto_id")
+    )
     private List<Reto> retosResueltos=new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reto> retosSubidos=new ArrayList<>();
     public User() {
     }
 
@@ -62,4 +72,16 @@ public class User {
             retosResueltos.add(resuelto);
         }
     }
+
+    public List<Reto> getRetosSubidos() {
+        return retosSubidos;
+    }
+
+    public void setRetosSubidos(List<Reto> retos){
+        this.retosSubidos=retos;
+    }
+
+    public void addRetoSubido(Reto guardar) {
+        retosSubidos.add(guardar);
+    }    
 }

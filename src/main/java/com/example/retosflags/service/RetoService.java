@@ -27,6 +27,11 @@ public class RetoService {
         retoRepository.save(guardar);
     }
 
+    public RetoDTO addAPIReto(RetoDTO reto){
+        Reto guardar = retoMapper.toDomain(reto);
+        Reto guardado = retoRepository.save(guardar);
+        return retoMapper.toDTO(guardado);
+    }
     public void deleteReto(RetoDTO reto){
         Reto borrar=retoMapper.toDomain(reto);
         retoRepository.delete(borrar);

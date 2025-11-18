@@ -5,10 +5,13 @@ import com.example.retosflags.model.User;
 import com.example.retosflags.dto.ComentarioDTO;
 import com.example.retosflags.dto.RetoDTO;
 import com.example.retosflags.dto.UserDTO;
+import com.example.retosflags.mapper.ComentarioMapper;
+import com.example.retosflags.mapper.RetoMapper;
 import com.example.retosflags.model.Comentario;
 import com.example.retosflags.repository.RetoRepository;
 import com.example.retosflags.service.ComentarioService;
 import com.example.retosflags.service.RetoService;
+import com.example.retosflags.service.UserService;
 import com.example.retosflags.repository.CommentRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +33,12 @@ public class RetoController {
     private RetoService retoService;
     @Autowired
     private ComentarioService comentarioService;
-
+    @Autowired
+    private RetoMapper retoMapper;
+    @Autowired
+    private ComentarioMapper comentarioMapper;
+    @Autowired
+    private UserService userService;
     @GetMapping("/")
     public String login(Model model, HttpSession session) {
         if (session.getAttribute("user") != null) {
@@ -107,19 +115,11 @@ public class RetoController {
     public String perfil(Model model, HttpSession session) {
         Object u = session.getAttribute("user");
         if (u == null) return "redirect:/";
+        User user=userService.getUser(((User)u).getId());
         String username = ((User) u).getUsername();
-        List<RetoDTO> propios = retoService.findByAuthorId(((User) u).getId());
-        List<RetoDTO> resueltos = new ArrayList<>();
-        Set<Long> solvedIds = retosResueltosPorUsuario.getOrDefault(username, Collections.emptySet());
-        if (!solvedIds.isEmpty()) {
-            for (Long rid : solvedIds) {
-                RetoDTO reto=retoService.getRetoById(rid);
-                if(reto!=null){
-                    resueltos.add(reto);
-                }
-            }
-        }
-        List<ComentarioDTO> userComments = comentarioService.findByUserId(((User) u).getId());
+        List<RetoDTO> propios = retoMapper.toDTOs(user.getRetosSubidos());
+        List<RetoDTO> resueltos = retoMapper.toDTOs(user.getRetosResueltos());
+        List<ComentarioDTO> userComments = comentarioMapper.toDTOs(user.getComentarios());
         model.addAttribute("user", u);
         model.addAttribute("retosPublicados", propios);
         model.addAttribute("retosResueltos", resueltos);
