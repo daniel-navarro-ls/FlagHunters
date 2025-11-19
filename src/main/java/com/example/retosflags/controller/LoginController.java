@@ -1,6 +1,7 @@
 package com.example.retosflags.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,9 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
     @PostMapping("/login")
     public String logUser(@RequestParam String username, @RequestParam String password,Model model, HttpSession session) {
         User user=new User(username,password);
@@ -34,7 +37,7 @@ public class LoginController {
     
     @PostMapping("/register")
     public String registerUser(@RequestParam String username, @RequestParam String password,Model model, HttpSession session) {
-        User user=new User(username,password);
+        User user=new User(username,passwordEncoder.encode(password));
         userService.addUser(user);
         session.setAttribute("user", user);
         session.setAttribute("username", user.getUsername());

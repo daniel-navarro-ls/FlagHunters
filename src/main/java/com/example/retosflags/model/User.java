@@ -3,6 +3,9 @@ package com.example.retosflags.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.example.retosflags.dto.RetoDTO;
 
 import jakarta.persistence.*;
@@ -83,5 +86,10 @@ public class User {
 
     public void addRetoSubido(Reto guardar) {
         retosSubidos.add(guardar);
-    }    
+    }
+
+    /*public String getEncodedPassword() {
+        String hasheada=passwordEncoder.encode(password);
+        return hasheada;
+    } */   
 }

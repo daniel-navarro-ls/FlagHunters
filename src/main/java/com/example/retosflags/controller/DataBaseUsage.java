@@ -9,6 +9,7 @@ import com.example.retosflags.model.Reto;
 import com.example.retosflags.service.UserService;
 import com.example.retosflags.repository.UserRepository;
 import com.example.retosflags.repository.RetoRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,8 @@ public class DataBaseUsage implements CommandLineRunner {
     @Autowired
     private RetoRepository retoRepository;
 
+    /*@Autowired
+	private PasswordEncoder passwordEncoder;*/
     @Override
     public void run(String... args) throws Exception {
         // Seed users if empty

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.retosflags.dto.RetoDTO;
 import com.example.retosflags.dto.UserDTO;
@@ -25,14 +26,21 @@ public class UserService {
     private RetoMapper retoMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public void addUser(User user) {
-        userRepository.save(user);
+        User guardar=new User(user.getUsername(), passwordEncoder.encode(user.getPassword()));
+        userRepository.save(guardar);
     }
 
     public User logUser(User user) {
-        Optional<User> found = userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
-        return found.orElse(null);
+        Optional<User> found = userRepository.findByUsername(user.getUsername());
+        if (found.isPresent()&&passwordEncoder.matches(user.getPassword(), found.get().getPassword())){
+            return found.get();
+        }else{
+            return null;
+        }
     }
 
     public User getUser(Long userId){
@@ -70,5 +78,16 @@ public class UserService {
             retoRepository.save(guardar);
             userRepository.save(user);
         }
+    }
+    public void updateUser(User user){
+        userRepository.save(user);
+    }
+    public User updateUserWithRetoResuelto(String username, Reto reto) {
+        User user = userRepository.findByUsernameWithRetosResueltos(username);
+        if (user != null && reto != null) {
+            user.addRetoResuelto(reto);
+            return userRepository.save(user);
+        }
+        return null;
     }
 }

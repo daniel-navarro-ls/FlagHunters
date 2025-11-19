@@ -16,6 +16,7 @@ import com.example.retosflags.repository.CommentRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
@@ -25,9 +26,6 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class RetoController {
-    private final List<Reto> retos = new ArrayList<>();
-    private Long nextId = 1L;
-    private final Map<String, Set<Long>> retosResueltosPorUsuario = new HashMap<>();
     
     @Autowired
     private RetoService retoService;
@@ -91,21 +89,24 @@ public class RetoController {
 
     @PostMapping("/resolver/{id}")
     public String resolverReto(@PathVariable Long id, @RequestParam String flag, Model model, HttpSession session) {
-        Object user=session.getAttribute("user");
+        Object userObj=session.getAttribute("user");
+        if(!(userObj instanceof User)){
+            return "redirect:/login";
+        }
+        User user=(User) userObj;
         RetoDTO reto = retoService.getRetoById(id);
         boolean correcto = reto != null && retoService.getFlag(reto).equals(flag);
         List<ComentarioDTO> comments = comentarioService.findByRetoId(id);
         model.addAttribute("reto", reto);
         model.addAttribute("comments", comments);
-        model.addAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", user);
         model.addAttribute("resultado", correcto ? "¡Flag correcta!" : "Flag incorrecta");
         model.addAttribute("correcto", correcto);
-        model.addAttribute("username", ((User) user).getUsername());
+        model.addAttribute("username", user.getUsername());
         if (correcto) {
-            Object u = session.getAttribute("user");
-            if (u instanceof User) {
-                String username = ((User) u).getUsername();
-                retosResueltosPorUsuario.computeIfAbsent(username, k -> new HashSet<>()).add(id);
+            User updatedUser=userService.updateUserWithRetoResuelto(user.getUsername(), retoMapper.toDomain(reto));
+            if(updatedUser!=null){
+                session.setAttribute("user", updatedUser);
             }
         }
         return "resolver";
