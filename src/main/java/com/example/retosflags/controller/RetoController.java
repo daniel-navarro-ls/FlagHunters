@@ -15,6 +15,9 @@ import com.example.retosflags.service.UserService;
 import com.example.retosflags.repository.CommentRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -47,11 +50,28 @@ public class RetoController {
     
     @GetMapping("/home")
     public String home(Model model, HttpSession session) {
-        Object user=session.getAttribute("user");
-        model.addAttribute("retos", retoService.getAllRetos());
-        model.addAttribute("user", session.getAttribute("user"));
-        model.addAttribute("username", ((User) user).getUsername());
-        return "index";
+        Object userObj=session.getAttribute("user");
+        if (userObj == null) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
+                // Hay usuario autenticado por Spring Security
+                String username = auth.getName();
+                User user = userService.findByUsername(username);
+                if (user != null) {
+                    session.setAttribute("user", user);
+                    userObj = user;
+                }
+            }
+        }
+    
+        // Si todavía no hay usuario, redirigir al login
+        if (!(userObj instanceof User)) {
+            return "redirect:/login";
+        }
+            model.addAttribute("retos", retoService.getAllRetos());
+            model.addAttribute("user", session.getAttribute("user"));
+            model.addAttribute("username", ((User) userObj).getUsername());
+            return "index";
     }
 
     @GetMapping("/crear")

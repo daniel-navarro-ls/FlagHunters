@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.example.retosflags.security.jwt.JwtRequestFilter;
 
@@ -54,15 +55,22 @@ public class RestSecurityConfig {
 		
 		http
 			.authorizeHttpRequests(authorize -> authorize
-                    // PRIVATE ENDPOINTS
-                    .requestMatchers(HttpMethod.POST,"/api/funkos/").hasRole("USER")
-					// PUBLIC ENDPOINTS
-					.anyRequest().permitAll()
-			);
+            .requestMatchers("/", "/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
+            .anyRequest().permitAll()
+        );
 		
         // Disable Form login Authentication
-        http.formLogin(formLogin -> formLogin.disable());
-
+        http.formLogin(form -> form
+            .loginPage("/login")
+            .defaultSuccessUrl("/home")
+            .failureUrl("/login?error=true")
+            .permitAll()
+        );
+		http.logout(logout -> logout
+            .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+    		.logoutSuccessUrl("/?logout")
+    		.permitAll()
+        );
         // Disable CSRF protection (it is difficult to implement in REST APIs)
         http.csrf(csrf -> csrf.disable());
 
@@ -70,10 +78,10 @@ public class RestSecurityConfig {
         http.httpBasic(httpBasic -> httpBasic.disable());
 
         // Stateless session
-        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));//cambiar a stateless para siguiente sprint
 
 		// Add JWT Token filter
-		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		//http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}

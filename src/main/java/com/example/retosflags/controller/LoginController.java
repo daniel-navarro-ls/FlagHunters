@@ -1,6 +1,11 @@
 package com.example.retosflags.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.GetMapping;
+
 
 import com.example.retosflags.model.User;
 import com.example.retosflags.service.UserService;
@@ -21,18 +27,33 @@ public class LoginController {
     private UserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+    @Autowired
+    private AuthenticationManager authenticationManager;
     @PostMapping("/login")
     public String logUser(@RequestParam String username, @RequestParam String password,Model model, HttpSession session) {
-        User user=new User(username,password);
-        User loggedUser=userService.logUser(user);
-        if(loggedUser==null){
+            try {
+            // Autenticar con Spring Security
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password)
+            );
+            
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            
+            // Obtener usuario de la base de datos
+            User user = userService.findByUsername(username);
+            if (user != null) {
+                session.setAttribute("user", user);
+                session.setAttribute("username", user.getUsername());
+                return "redirect:/home";
+            }
+            
+        } catch (BadCredentialsException e) {
             model.addAttribute("error", "Usuario o contraseña incorrectos");
-            return "error";
+            return "login";
         }
-        session.setAttribute("user", loggedUser);
-        session.setAttribute("username", loggedUser.getUsername());
-        return "redirect:/home";
+        
+        model.addAttribute("error", "Error en el login");
+        return "login";
     }
     
     @PostMapping("/register")
@@ -43,10 +64,11 @@ public class LoginController {
         session.setAttribute("username", user.getUsername());
         return "redirect:/home";
     }
-
-    @GetMapping("/logout")
+    
+    /*@GetMapping("/logout")
     public String logout(HttpSession session) {
         session.removeAttribute("user");
-        return "redirect:/";
-    }
+        session.invalidate();;
+        return "redirect:/login";
+    }*/
 }
