@@ -70,13 +70,15 @@ public class UserService {
     }
 
     public void actualizarRetosUsuario(Long userId, RetoDTO reto) {
-        User user = userRepository.findById(userId).orElse(null);
-        if (user != null) {
-            Reto guardar = retoMapper.toDomain(reto);
-            guardar.setUser(user);
-            user.addRetoSubido(guardar);
-            retoRepository.save(guardar);
-            userRepository.save(user);
+        if(userId!=null){
+            User user = userRepository.findById(userId).orElse(null);
+            if (user != null) {
+                Reto guardar = retoMapper.toDomain(reto);
+                guardar.setUser(user);
+                Reto guardado=retoRepository.save(guardar);
+                user.addRetoSubido(guardado);
+                userRepository.save(user);
+            }
         }
     }
     public void updateUser(User user){

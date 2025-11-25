@@ -57,13 +57,19 @@ public class RetoApiController {
                                              @RequestParam String flag,
                                              @RequestParam Long userId) {
         
-        RetoDTO reto=retoService.createRetoDTO(null, titulo, descripcion, enlace, flag, userService.getUser(userId));
-        RetoDTO devolver=retoService.addAPIReto(reto);
-        userService.actualizarRetosUsuario(userId,reto);
-        if(reto!=null){
-            return new ResponseEntity<>(devolver,HttpStatus.ACCEPTED);
+        try {
+        User user=userService.getUser(userId);
+        if (user==null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        RetoDTO reto=retoService.createRetoDTO(null, titulo, descripcion, enlace, flag, user);
+        RetoDTO retoGuardado=retoService.addAPIReto(reto);
+        userService.actualizarRetosUsuario(userId, retoGuardado);
+        return new ResponseEntity<>(retoGuardado, HttpStatus.CREATED);
+        
+    } catch (Exception e) {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
     }
     
     @GetMapping("/{id}")
