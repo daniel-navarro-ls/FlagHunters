@@ -3,6 +3,7 @@ package com.example.retosflags.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -17,7 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.example.retosflags.security.jwt.JwtRequestFilter;
-
+import com.example.retosflags.security.jwt.UnauthorizedHandlerJwt;
+import com.example.retosflags.security.filter.PathTraversalFilter;
 @Configuration
 @EnableWebSecurity
 public class RestSecurityConfig {
@@ -27,6 +29,12 @@ public class RestSecurityConfig {
 
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
+
+	@Autowired
+	private UnauthorizedHandlerJwt unauthorizedHandlerJwt;
+	
+	@Autowired
+	private PathTraversalFilter pathTraversalFilter;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -48,8 +56,52 @@ public class RestSecurityConfig {
 		return authConfig.getAuthenticationManager();
 	}
 
+
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	@Order(1)
+	public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
+		
+		http.authenticationProvider(authenticationProvider());
+		
+		http
+			.securityMatcher("/api/**")
+			.exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
+		
+		http
+			.authorizeHttpRequests(authorize -> authorize	
+					.requestMatchers( "/api/auth/**").permitAll()			
+					// Default: require authentication for any other API endpoint
+					.anyRequest().authenticated()
+			);
+		
+        // Disable Form login Authentication
+        http.formLogin(formLogin -> formLogin.disable());
+
+        // Disable CSRF protection (it is difficult to implement in REST APIs)
+        http.csrf(csrf -> csrf.disable());
+
+        // Disable Basic Authentication
+        http.httpBasic(httpBasic -> httpBasic.disable());
+
+        // Stateless session
+        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+		// Add JWT Token filter
+		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		
+		// Add Path Traversal filter
+		http.addFilterBefore(pathTraversalFilter, JwtRequestFilter.class);
+		
+		// Require HTTPS for all API requests
+		//http.requiresChannel(channel -> channel.anyRequest().requiresSecure());
+
+		return http.build();
+	}
+
+
+	@Bean
+	@Order(2)
+	public SecurityFilterChain webFilterChain(HttpSecurity http) throws Exception {
 		
 		http.authenticationProvider(authenticationProvider());
 		
@@ -74,14 +126,12 @@ public class RestSecurityConfig {
         // Disable CSRF protection (it is difficult to implement in REST APIs)
         http.csrf(csrf -> csrf.disable());
 
-        // Disable Basic Authentication
-        http.httpBasic(httpBasic -> httpBasic.disable());
+       // Add Path Traversal filter
+		http.addFilterBefore(pathTraversalFilter, UsernamePasswordAuthenticationFilter.class);
 
         // Stateless session
         http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));//cambiar a stateless para siguiente sprint
 
-		// Add JWT Token filter
-		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
