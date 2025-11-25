@@ -81,7 +81,7 @@ public class RestSecurityConfig {
         http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));//cambiar a stateless para siguiente sprint
 
 		// Add JWT Token filter
-		//http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
