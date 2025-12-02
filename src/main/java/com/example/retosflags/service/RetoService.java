@@ -21,14 +21,24 @@ public class RetoService {
     private RetoRepository retoRepository;
     @Autowired
     private RetoMapper retoMapper;
+    @Autowired
+    private SanitizationService sanitizationService;
 
+    private void sanitizeReto(Reto reto){
+        sanitizationService.sanitize(reto.getTitulo());
+        sanitizationService.sanitize(reto.getDescripcion());
+        sanitizationService.sanitize(reto.getEnlace());
+        sanitizationService.sanitize(reto.getFlag());
+    }
     public void addReto(RetoDTO reto){
         Reto guardar=retoMapper.toDomain(reto);
+        sanitizeReto(guardar);
         retoRepository.save(guardar);
     }
 
     public RetoDTO addAPIReto(RetoDTO reto){
         Reto guardar = retoMapper.toDomain(reto);
+        sanitizeReto(guardar);
         Reto guardado = retoRepository.save(guardar);
         return retoMapper.toDTO(guardado);
     }

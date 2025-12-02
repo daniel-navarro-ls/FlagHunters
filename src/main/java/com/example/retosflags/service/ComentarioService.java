@@ -31,7 +31,14 @@ public class ComentarioService {
     private ComentarioMapper comentarioMapper;
     @Autowired
     private RetoMapper retoMapper;
+    @Autowired
+    private SanitizationService sanitizationService;
+
+    private void sanitizeComment(Comentario comment){
+        sanitizationService.sanitize(comment.getComment());
+    }
     public void addComment(Long retoId, Long userId, String comentario){
+        sanitizationService.sanitize(comentario);
         Optional<Reto> reto=retoRepository.findById(retoId);
         Optional<User> user=userRepository.findById(userId);
         if(reto.isPresent()&&user.isPresent()){
@@ -68,6 +75,7 @@ public class ComentarioService {
     }
 
     public ComentarioDTO createCommentDTO(String content, User user, RetoDTO reto) {
+        sanitizationService.sanitize(content);
         Comentario comentario=new Comentario(content, user, retoMapper.toDomain(reto));
         return comentarioMapper.toDTO(comentario);
     }

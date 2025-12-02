@@ -28,13 +28,21 @@ public class UserService {
     private UserMapper userMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private SanitizationService sanitizationService;
 
+    private void sanitizeUser(User user){
+        sanitizationService.sanitize(user.getUsername());
+        sanitizationService.sanitize(user.getPassword());
+    }
     public void addUser(User user) {
+        sanitizeUser(user);
         User guardar=new User(user.getUsername(), passwordEncoder.encode(user.getPassword()));
         userRepository.save(guardar);
     }
 
     public User logUser(User user) {
+        sanitizeUser(user);
         Optional<User> found = userRepository.findByUsername(user.getUsername());
         if (found.isPresent()&&passwordEncoder.matches(user.getPassword(), found.get().getPassword())){
             return found.get();
