@@ -71,6 +71,8 @@ public class RestSecurityConfig {
 			.authorizeHttpRequests(authorize -> authorize	
 					.requestMatchers( "/api/auth/**").permitAll()			
 					// Default: require authentication for any other API endpoint
+					.requestMatchers(HttpMethod.GET,"/api/retos/").permitAll()
+					.requestMatchers(HttpMethod.GET, "/api/retos/{id}").permitAll()
 					.anyRequest().authenticated()
 			);
 		
@@ -108,7 +110,8 @@ public class RestSecurityConfig {
 		http
 			.authorizeHttpRequests(authorize -> authorize
             .requestMatchers("/", "/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
-            .anyRequest().permitAll()
+			.requestMatchers(HttpMethod.GET, "/home").permitAll()
+            .anyRequest().authenticated()
         );
 		
         // Disable Form login Authentication
