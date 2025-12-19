@@ -13,12 +13,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/retos/",
-					"protocol": "http",
+					"raw": "https://localhost:8443/api/retos/",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"api",
 						"retos",
@@ -38,7 +38,7 @@
 					"formdata": [
 						{
 							"key": "titulo",
-							"value": "si",
+							"value": "reto nuevo",
 							"type": "text"
 						},
 						{
@@ -64,12 +64,12 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/retos/crearReto",
-					"protocol": "http",
+					"raw": "https://localhost:8443/api/retos/crearReto",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"api",
 						"retos",
@@ -85,12 +85,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/retos/1",
-					"protocol": "http",
+					"raw": "https://localhost:8443/api/retos/1",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"api",
 						"retos",
@@ -106,12 +106,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/retos/perfil/1",
-					"protocol": "http",
+					"raw": "https://localhost:8443/api/retos/perfil/1",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"api",
 						"retos",
@@ -146,12 +146,12 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/retos/resolver/3",
-					"protocol": "http",
+					"raw": "https://localhost:8443/api/retos/resolver/3",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"api",
 						"retos",
@@ -186,12 +186,12 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/retos/comment/1",
-					"protocol": "http",
+					"raw": "https://localhost:8443/api/retos/comment/1",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"api",
 						"retos",
@@ -208,12 +208,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/retos/1/comentarios",
-					"protocol": "http",
+					"raw": "https://localhost:8443/api/retos/1/comentarios",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"api",
 						"retos",
@@ -230,12 +230,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/retos/usuario/1",
-					"protocol": "http",
+					"raw": "https://localhost:8443/api/retos/usuario/1",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"api",
 						"retos",
@@ -252,16 +252,67 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/retos/1",
-					"protocol": "http",
+					"raw": "https://localhost:8443/api/retos/1",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"api",
 						"retos",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Log User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:8443/api/auth/login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "8443",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LogOut User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:8443/api/auth/logout",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "8443",
+					"path": [
+						"api",
+						"auth",
+						"logout"
 					]
 				}
 			},
